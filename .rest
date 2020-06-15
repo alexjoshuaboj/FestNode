@@ -1,0 +1,39 @@
+POST http://localhost:3000/users/register
+Content-Type: application/json
+
+{
+    "nombre": "Alejandro",
+    "apellidos": "Bojneag Joshua",
+    "email": "alex@gmail.com",
+    "password": "tomato",
+    "telefono": "674396639",
+    "username": "elflipao"
+}
+
+###
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+    "email": "eliashuerta@gmail.com",
+    "password": "12345"
+}
+###
+GET http://localhost:3000/fests
+Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjMxLCJjcmVhdGVEQVRFIjoxNTkyMjA3NTc3LCJleHBpcmVEQVRFIjoxNTkyMjA4NDc3LCJpYXQiOjE1OTIyMDc1Nzd9.oiHXxgNXV6sww-3W-AySk_30PcVOcqb4ulGkQfyN-0c"
+
+
+
+
+
+###
+POST http://localhost:3000/fests/newfest
+Content-Type: application/json
+
+{
+    "idUser": 2,
+    "idFestivales": 1
+}
+
+###
+GET http://localhost:3000/fests/spotify/getToken

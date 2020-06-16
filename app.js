@@ -5,9 +5,12 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 
-const { checkToken } = require('./routes/middlewares/token.middleware');
+const {
+  checkToken
+} = require('./routes/middlewares/token.middleware');
 const usersRouter = require('./routes/users');
 const festivalesRouter = require('./routes/festivales');
+const checkTokenRouter = require('./routes/checkToken');
 
 
 require('dotenv').config();
@@ -39,6 +42,7 @@ app.use((req, res, next) => {
 app.use('/users', usersRouter);
 app.use('/users/login', checkToken, usersRouter);
 app.use('/fests', checkToken, festivalesRouter);
+app.use('/checkToken', checkToken, checkTokenRouter);
 
 
 // catch 404 and forward to error handler

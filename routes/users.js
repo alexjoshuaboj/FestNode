@@ -32,10 +32,11 @@ router.post('/login', async (req, res) => {
       if (result) {
         const verifyPass = bcrypt.compareSync(req.body.password, result.password);
         if (verifyPass) {
-          console.log(result);
+          const createdToken = createToken(result.id);
+          await User.updateToken(result.id, createdToken);
           res.json({
             success: "Login done!",
-            token: createToken(result.id)
+            token: createdToken
           });
         } else {
           res.json({
@@ -53,7 +54,9 @@ router.post('/login', async (req, res) => {
       res.send(true);
     }
   } catch (err) {
-    res.json({ err: err.message })
+    res.json({
+      err: err.message
+    })
   };
 });
 
@@ -71,4 +74,3 @@ function createToken(pUserID) {
   return jwt.sign(payload, process.env.SECRET_KEY)
 }
 module.exports = router;
-

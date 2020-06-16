@@ -30,7 +30,7 @@ const getBandsFest = (fest) => {
         })
     })
 };
-// Query que devuelve las bandas y borarios de un usuario y un festival
+// Query que devuelve las bandas y horarios de un usuario y un festival
 const getHours = ({
     idUser,
     idFest

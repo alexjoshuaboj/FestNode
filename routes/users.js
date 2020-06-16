@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user')
 const moment = require('moment');
 const jwt = require('jsonwebtoken');
-const spotifyToken = require('../models/spotify.acces');
+
 
 
 /* GET users listing. */
@@ -57,15 +57,6 @@ router.post('/login', async (req, res) => {
   };
 });
 
-// Spotify Requests
-router.get('/login/spotify', (req, res) => {
-  const scopes = 'user-read-private user-read-email';
-  res.redirect('https://accounts.spotify.com/authorize' +
-    '?response_type=code' +
-    '&client_id=' + my_client_id +
-    (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
-    '&redirect_uri=' + encodeURIComponent(redirect_uri));
-});
 
 
 

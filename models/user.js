@@ -1,4 +1,3 @@
-const scrap = require('../scrapping/index.scrap');
 
 const createUser = ({
     name,
@@ -26,18 +25,7 @@ const getByEmail = (pEmail) => {
     })
 }
 
-
-// TODO: Querys para inserta los festivales y las bandas en la base de datos.
-const insertFestivales = ({
-
-}) => { };
-const insertBandas = ({
-
-}) => { };
-
 module.exports = {
     createUser,
-    getByEmail,
-    insertFestivales,
-    insertBandas
+    getByEmail
 };

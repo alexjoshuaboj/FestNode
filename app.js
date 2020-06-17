@@ -93,7 +93,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', raizRouter);
 app.use('/users', usersRouter);
 app.use('/users/login', checkToken, usersRouter);
-app.use('/fests', checkToken, festivalesRouter);
+app.use('/fests', festivalesRouter);
 app.use('/checkToken', checkToken, checkTokenRouter);
 
 app.get(

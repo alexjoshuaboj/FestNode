@@ -7,6 +7,7 @@ const userFestBand = require('../models/userBandFest');
 //Ruta GET que devuelve todos los festivales
 router.get('/', async (req, res) => {
     try {
+        console.log('Rqe de fest: ', req)
         const festivales = await Festival.getAll();
         res.json(festivales);
     } catch (err) {
@@ -96,7 +97,7 @@ router.get('/spotify/getToken', (req, res) => {
     Spotify.spotifyAccessToken()
         .then(function (response) {
             Utils.createFile(response.data.access_token);
-            res.send('Save token',);
+            res.send('Save token', );
         }).catch(function (error) {
             res.send(error);
         });

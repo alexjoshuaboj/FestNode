@@ -97,7 +97,7 @@ app.use((req, res, next) => {
 
 app.use('/users', usersRouter);
 app.use('/users/login', checkToken, usersRouter);
-app.use('/fests', checkToken, festivalesRouter);
+app.use('/fests', festivalesRouter);
 app.use('/checkToken', checkToken, checkTokenRouter);
 
 app.get(

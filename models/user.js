@@ -1,4 +1,3 @@
-
 const createUser = ({
     name,
     surname,
@@ -23,9 +22,29 @@ const getByEmail = (pEmail) => {
             resolve(rows[0]);
         })
     })
+};
+
+const updateToken = (id, token) => {
+    return new Promise((resolve, reject) => {
+        db.query('update usuarios set token = ? where id = ?', [token, id], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+        })
+    })
+};
+
+const checkValidatorToken = () => {
+    return new Promise((resolve, reject) => {
+        db.query('select usuarios.token from usuarios', (err, rows) => {
+            if (err) reject(err);
+            resolve(rows);
+        })
+    })
 }
 
 module.exports = {
     createUser,
-    getByEmail
+    getByEmail,
+    updateToken,
+    checkValidatorToken
 };

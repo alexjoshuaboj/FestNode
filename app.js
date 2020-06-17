@@ -11,9 +11,12 @@ const cors = require('cors');
 
 
 
-const { checkToken } = require('./routes/middlewares/token.middleware');
+const {
+  checkToken
+} = require('./routes/middlewares/token.middleware');
 const usersRouter = require('./routes/users');
 const festivalesRouter = require('./routes/festivales');
+const checkTokenRouter = require('./routes/checkToken');
 
 
 
@@ -40,10 +43,10 @@ Las estrategias en Passport requieren una función `verificar`, que acepta crede
  */
 passport.use(
   new spotifyStrategy({
-    clientID: process.env.SPOTIFY_CLIENT,
-    clientSecret: process.env.SPOTIFY_SECRET,
-    callBackUri: 'http://localhost:3000/callback'
-  },
+      clientID: process.env.SPOTIFY_CLIENT,
+      clientSecret: process.env.SPOTIFY_SECRET,
+      callBackUri: 'http://localhost:3000/callback'
+    },
     function (accessToken, refreshToken, expires_in, profile, done) {
       process.nextTick(() => {
         /**
@@ -65,7 +68,11 @@ app.use(cors());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(session({
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: true
+}));
 /**
  * middleware passport.session (), para soportar sesiones de inicio de sesión persistentes (recomendado).
  */
@@ -91,6 +98,7 @@ app.use((req, res, next) => {
 app.use('/users', usersRouter);
 app.use('/users/login', checkToken, usersRouter);
 app.use('/fests', checkToken, festivalesRouter);
+app.use('/checkToken', checkToken, checkTokenRouter);
 
 app.get(
   '/auth/spotify',
@@ -106,7 +114,9 @@ app.get(
 
 app.get(
   '/callback',
-  passport.authenticate('spotify', { failureRedirect: '/login' }),
+  passport.authenticate('spotify', {
+    failureRedirect: '/login'
+  }),
   function (req, res) {
     res.redirect('/');
   }

@@ -17,11 +17,29 @@ const {
 const usersRouter = require('./routes/users');
 const festivalesRouter = require('./routes/festivales');
 const checkTokenRouter = require('./routes/checkToken');
+const raizRouter = require('./routes/raiz');
 
 
 
 
 require('dotenv').config();
+
+
+var app = express();
+require('./db').connect();
+
+
+// view engine setup/configure express
+app.use(cors());
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
+app.use(session({
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: true
+}));
+
 //Passport use for spotify oauth
 /**
  * Configuración de sesión de pasaporte.
@@ -43,10 +61,10 @@ Las estrategias en Passport requieren una función `verificar`, que acepta crede
  */
 passport.use(
   new spotifyStrategy({
-      clientID: process.env.SPOTIFY_CLIENT,
-      clientSecret: process.env.SPOTIFY_SECRET,
-      callBackUri: 'http://localhost:3000/callback'
-    },
+    clientID: process.env.SPOTIFY_CLIENT,
+    clientSecret: process.env.SPOTIFY_SECRET,
+    callbackURL: 'http://localhost:3000/callback'
+  },
     function (accessToken, refreshToken, expires_in, profile, done) {
       process.nextTick(() => {
         /**
@@ -57,22 +75,6 @@ passport.use(
     }
   )
 );
-
-
-var app = express();
-require('./db').connect();
-
-
-// view engine setup/configure express
-app.use(cors());
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
-app.use(session({
-  secret: 'keyboard cat',
-  resave: true,
-  saveUninitialized: true
-}));
 /**
  * middleware passport.session (), para soportar sesiones de inicio de sesión persistentes (recomendado).
  */
@@ -87,14 +89,8 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use((req, res, next) => {
-  if (req.url === '/') {
-    res.redirect('/home');
-  } else {
-    next();
-  }
-})
 
+app.use('/', raizRouter);
 app.use('/users', usersRouter);
 app.use('/users/login', checkToken, usersRouter);
 app.use('/fests', checkToken, festivalesRouter);
@@ -148,7 +144,7 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect('/login');
+  res.redirect('/users');
 }
 
 module.exports = app;

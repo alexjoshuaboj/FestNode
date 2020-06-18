@@ -3,7 +3,7 @@ const express = require('express'),
   session = require('express-session'),
   passport = require('passport'),
   swig = require('swig'),
-  spotifyStrategy = require('./routes/index').Strategy;
+  spotifyStrategy = require('./routes/index').StrategySpotify;
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -114,7 +114,8 @@ app.get(
     failureRedirect: '/login'
   }),
   function (req, res) {
-    res.redirect('/');
+    res.redirect('http://localhost:4200/choose-fest');
+    console.log(req);
   }
 );
 

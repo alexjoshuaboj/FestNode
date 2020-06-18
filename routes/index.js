@@ -1,8 +1,10 @@
 
 
-const Strategy = require('../spotifyStrategy/strategy');
+const StrategySpotify = require('../authFacebook-Spotify/spotifyStrategy/strategy');
+const StrategyFaceBook = require('../authFacebook-Spotify/facebookStrategy/strategy')
+
 
 module.exports = {
-  Strategy
-
+  StrategySpotify,
+  StrategyFaceBook
 }

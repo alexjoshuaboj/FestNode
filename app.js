@@ -3,11 +3,14 @@ const express = require('express'),
   session = require('express-session'),
   passport = require('passport'),
   swig = require('swig'),
-  spotifyStrategy = require('./routes/index').StrategySpotify;
+  spotifyStrategy = require('./routes/index').StrategySpotify,
+  //Facebook require's
+  FacebookStrategy = require('./routes/index').StrategyFaceBook;
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+
 
 
 
@@ -75,6 +78,24 @@ passport.use(
     }
   )
 );
+
+/**
+ * Funcion verify para el uso de Passport-Facebook, creando una nueva instancia de la Strateg.js;
+ * 
+ */
+passport.use(new FacebookStrategy({
+  clientID: process.env.FACEBOOK_CLIENT,
+  clientSecret: process.env.FACEBOOK_SECRET,
+  callbackURL: "http://localhost:3000/auth/facebook/callback"
+},
+  function (accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
+
+
 /**
  * middleware passport.session (), para soportar sesiones de inicio de sesión persistentes (recomendado).
  */
@@ -96,6 +117,7 @@ app.use('/users/login', checkToken, usersRouter);
 app.use('/fests', festivalesRouter);
 app.use('/checkToken', checkToken, checkTokenRouter);
 
+//! routes for Spotify oAuth;
 app.get(
   '/auth/spotify',
   passport.authenticate('spotify', {
@@ -123,7 +145,24 @@ app.get('/logout', function (req, res) {
   req.logout();
   res.redirect('/');
 });
+//!
 
+//! routes for Facebook oAuth;
+app.get('/auth/facebook',
+  passport.authenticate('facebook'));
+
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook', {
+    failureRedirect: '/login'
+  }),
+  function (req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('http://localhost:4200/choose-fest');
+  });
+
+
+
+//!
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
@@ -140,7 +179,7 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-
+//!middleware
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();

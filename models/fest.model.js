@@ -24,7 +24,7 @@ const selectFest = ({
 //Query que devuelve las bandas de un festival
 const getBandsFest = (fest) => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT bandas.id, bandas.nombre, bandas.spotify_id from festivales_bandas, bandas where festivales_bandas.bandas_id = bandas.id and festivales_bandas.festivales_id = ?', [fest], (err, rows) => {
+        db.query('SELECT bandas.id, bandas.nombre, bandas.spotify_id, bandas.img, festivales_bandas.idfestivales_bandas from festivales_bandas, bandas where festivales_bandas.bandas_id = bandas.id and festivales_bandas.festivales_id = ?', [fest], (err, rows) => {
             if (err) reject(err);
             resolve(rows);
         })

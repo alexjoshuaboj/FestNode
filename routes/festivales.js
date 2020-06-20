@@ -23,9 +23,9 @@ router.post('/newfest', async (req, res) => {
     try {
         const result = await Festival.selectFest(req.body);
         if (result['affectedRows'] === 1) {
-            res.json({
-                success: "Festival agregado"
-            })
+            res.json(result
+                /* success: "Festival agregado" */
+            )
         } else {
             res.json({
                 error: 'Error al agregar festival'
@@ -50,6 +50,25 @@ router.get('/:idFest/bands', async (req, res) => {
         });
     };
 });
+
+router.post('/newBands', async (req, res) => {
+    try {
+        const result = await userFestBand.userFestBand(req.body);
+        if (result['affectedRows'] === 1) {
+            res.json(result
+                /* success: "Artista agregado" */
+            )
+        } else {
+            res.json({
+                error: 'Error al agregar artista'
+            })
+        }
+    } catch (err) {
+        res.json({
+            error: err
+        })
+    }
+})
 
 router.get('/imgSpotify/:idArtist', async (req, res) => {
     try {

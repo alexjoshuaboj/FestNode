@@ -51,6 +51,29 @@ const updatePhoto = (id, url) => {
             resolve(result);
         })
     })
+};
+const getUser = (id) => {
+    return new Promise((resolve, reject) => {
+        db.query('select name, surname, email, phone_number, username, imagen from heroku_66e653247fde55b.usuarios where id = ?', [id], (err, rows) => {
+            if (err) reject(err);
+            resolve(rows);
+        })
+    })
+};
+
+const updateUser = ({
+    name,
+    surname,
+    phone_number,
+    email,
+    username
+}, id) => {
+    return new Promise((resolve, reject) => {
+        db.query('update usuarios set name = ?, surname = ?, email = ?, phone_number = ?, username = ? where id = ?', [name, surname, email, phone_number, username, id], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+        })
+    })
 }
 
 /* const registerWithSpotify = (token_spotify) => {
@@ -68,4 +91,10 @@ module.exports = {
     updateToken,
     checkValidatorToken,
     updatePhoto,
+<<<<<<< HEAD
 }
+=======
+    getUser,
+    updateUser
+};
+>>>>>>> 23838ad9f4fb2b0800b73497c377fe6ddc63fef9

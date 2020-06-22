@@ -25,6 +25,7 @@ const raizRouter = require('./routes/raiz');
 
 
 
+
 require('dotenv').config();
 
 
@@ -52,10 +53,14 @@ Esto será tan simple como almacenar el ID de usuario cuando se serializa y enco
  */
 passport.serializeUser((user, done) => {
   done(null, user);
+  console.log(user);
+
 });
 
 passport.deserializeUser((obj, done) => {
   done(null, obj);
+  console.log(obj);
+
 });
 
 /**
@@ -86,7 +91,7 @@ passport.use(
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_CLIENT,
   clientSecret: process.env.FACEBOOK_SECRET,
-  callbackURL: "http://localhost:3000/auth/facebook/callback"
+  callbackURL: "http://localhost:3000/callback"
 },
   function (accessToken, refreshToken, profile, cb) {
     User.findOrCreate({ facebookId: profile.id }, function (err, user) {
@@ -118,6 +123,10 @@ app.use('/fests', festivalesRouter);
 app.use('/checkToken', checkToken, checkTokenRouter);
 
 //! routes for Spotify oAuth;
+app.get('/account', ensureAuthenticated, function (req, res) {
+  res.json({ user: req.user });
+});
+
 app.get(
   '/auth/spotify',
   passport.authenticate('spotify', {
@@ -125,8 +134,7 @@ app.get(
     showDialog: true
   }),
   function (req, res) {
-    // La solicitud se redirigirá a Spotify para autenticación,
-    //por lo que no se llamará a esta función..
+    console.log(req, res)
   }
 );
 
@@ -136,14 +144,17 @@ app.get(
     failureRedirect: '/login'
   }),
   function (req, res) {
+    /*     res.json({
+          code: req.query.code
+        }); */
     res.redirect('http://localhost:4200/choose-fest');
-    console.log(req);
+
   }
 );
 
 app.get('/logout', function (req, res) {
   req.logout();
-  res.redirect('/');
+  res.redirect('http://localhost:4200/login');
 });
 //!
 
@@ -151,7 +162,7 @@ app.get('/logout', function (req, res) {
 app.get('/auth/facebook',
   passport.authenticate('facebook'));
 
-app.get('/auth/facebook/callback',
+app.get('/callback',
   passport.authenticate('facebook', {
     failureRedirect: '/login'
   }),
@@ -184,7 +195,7 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect('/users');
+  res.redirect('http://localhost:4200/choose-fest');
 }
 
 module.exports = app;

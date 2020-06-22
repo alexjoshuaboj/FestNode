@@ -4,7 +4,7 @@ const userFestBand = ({
     bandFest
 }) => {
     return new Promise((resolve, reject) => {
-        db.query('INSERT INTO `heroku_66e653247fde55b`.`user-fest--fest-band` (`usuarios_festivales_idusuarios_festivales`, `festivales_bandas_idfestivales_bandas`) VALUES (?, ?)', [userFest, bandFest], (err, result) => {
+        db.query('INSERT INTO `heroku_66e653247fde55b`.`bands_users` (`usuarios_festivales_idusuarios_festivales`, `festivales_bandas_idfestivales_bandas`) VALUES (?, ?)', [userFest, bandFest], (err, result) => {
             if (err) reject(err);
             resolve(result);
         })

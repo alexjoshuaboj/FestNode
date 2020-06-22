@@ -12,6 +12,9 @@ const logger = require('morgan');
 const cors = require('cors');
 
 
+//import user register spotify function
+
+/* const spotifyRegister = require('./models/user').registerWithSpotify; */
 
 
 const {
@@ -21,6 +24,7 @@ const usersRouter = require('./routes/users');
 const festivalesRouter = require('./routes/festivales');
 const checkTokenRouter = require('./routes/checkToken');
 const raizRouter = require('./routes/raiz');
+const { log } = require('console');
 
 
 
@@ -147,7 +151,6 @@ app.get(
     /*     res.json({
           code: req.query.code
         }); */
-    res.redirect('http://localhost:4200/choose-fest');
 
   }
 );
@@ -168,7 +171,11 @@ app.get('/callback',
   }),
   function (req, res) {
     // Successful authentication, redirect home.
-    res.redirect('http://localhost:4200/choose-fest');
+    res.json(
+      {
+        code: req.query.code
+      }
+    )
   });
 
 

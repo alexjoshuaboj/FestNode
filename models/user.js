@@ -1,3 +1,5 @@
+const db = require("../db");
+
 const createUser = ({
     name,
     surname,
@@ -51,10 +53,19 @@ const updatePhoto = (id, url) => {
     })
 }
 
+/* const registerWithSpotify = (token_spotify) => {
+    return new Promise((resolve, reject) => {
+        db.query('insert into usuarios (token_spotify) value (?)', [token_spotify], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+        })
+    })
+} */
+
 module.exports = {
     createUser,
     getByEmail,
     updateToken,
     checkValidatorToken,
-    updatePhoto
-};
+    updatePhoto,
+}

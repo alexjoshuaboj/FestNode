@@ -93,5 +93,35 @@ router.post('/updatePhoto', async (req, res) => {
       error: err
     })
   }
+});
+
+router.get('/getUser/:idUser', async (req, res) => {
+  try {
+    const result = await User.getUser(req.params.idUser);
+    res.json(result[0]);
+  } catch (err) {
+    res.json({
+      error: err
+    })
+  }
+});
+
+router.post('/updateUser/:idUser', async (req, res) => {
+  try {
+    const result = await User.updateUser(req.body, req.params.idUser);
+    if (result['affectedRows'] === 1) {
+      res.json({
+        success: 'Información agregada'
+      })
+    } else {
+      res.json({
+        error: 'No agregada'
+      })
+    }
+  } catch (err) {
+    res.json({
+      error: err.message
+    })
+  }
 })
 module.exports = router;

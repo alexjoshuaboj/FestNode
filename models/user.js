@@ -49,6 +49,29 @@ const updatePhoto = (id, url) => {
             resolve(result);
         })
     })
+};
+const getUser = (id) => {
+    return new Promise((resolve, reject) => {
+        db.query('select name, surname, email, phone_number, username, imagen from heroku_66e653247fde55b.usuarios where id = ?', [id], (err, rows) => {
+            if (err) reject(err);
+            resolve(rows);
+        })
+    })
+};
+
+const updateUser = ({
+    name,
+    surname,
+    phone_number,
+    email,
+    username
+}, id) => {
+    return new Promise((resolve, reject) => {
+        db.query('update usuarios set name = ?, surname = ?, email = ?, phone_number = ?, username = ? where id = ?', [name, surname, email, phone_number, username, id], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+        })
+    })
 }
 
 module.exports = {
@@ -56,5 +79,7 @@ module.exports = {
     getByEmail,
     updateToken,
     checkValidatorToken,
-    updatePhoto
+    updatePhoto,
+    getUser,
+    updateUser
 };

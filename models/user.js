@@ -40,11 +40,21 @@ const checkValidatorToken = () => {
             resolve(rows);
         })
     })
+};
+
+const updatePhoto = (id, url) => {
+    return new Promise((resolve, reject) => {
+        db.query('update usuarios set imagen = ? where id = ?', [url, id], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+        })
+    })
 }
 
 module.exports = {
     createUser,
     getByEmail,
     updateToken,
-    checkValidatorToken
+    checkValidatorToken,
+    updatePhoto
 };

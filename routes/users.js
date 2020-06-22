@@ -72,5 +72,26 @@ function createToken(pUserID) {
     expireDATE: moment().add(15, 'minutes').unix()
   }
   return jwt.sign(payload, process.env.SECRET_KEY)
-}
+};
+
+//Subir imagen de perfil
+
+router.post('/updatePhoto', async (req, res) => {
+  try {
+    const result = await User.updatePhoto(req.body.id, req.body.url);
+    if (result['affectedRows'] === 1) {
+      res.json({
+        success: 'Foto agregada'
+      })
+    } else {
+      res.json({
+        error: 'No agregada'
+      })
+    }
+  } catch (err) {
+    res.json({
+      error: err
+    })
+  }
+})
 module.exports = router;

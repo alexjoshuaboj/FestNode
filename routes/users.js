@@ -32,7 +32,7 @@ router.post('/login', async (req, res) => {
       if (result) {
         const verifyPass = bcrypt.compareSync(req.body.password, result.password);
         if (verifyPass) {
-          const createdToken = createToken(result.id);
+          const createdToken = createToken(result.id, result.role);
           await User.updateToken(result.id, createdToken);
           res.json({
             success: "Login done!",
@@ -65,11 +65,12 @@ router.post('/login', async (req, res) => {
 
 //JWT// Creacion del token para el usuario
 
-function createToken(pUserID) {
+function createToken(pUserID, pRoleUser) {
   const payload = {
     userID: pUserID,
     createDATE: moment().unix(),
-    expireDATE: moment().add(15, 'minutes').unix()
+    expireDATE: moment().add(15, 'minutes').unix(),
+    role: pRoleUser
   }
   return jwt.sign(payload, process.env.SECRET_KEY)
 };

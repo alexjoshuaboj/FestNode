@@ -2,20 +2,21 @@ const createError = require('http-errors');
 const express = require('express'),
   session = require('express-session'),
   passport = require('passport'),
-  swig = require('swig'),
-  spotifyStrategy = require('./routes/index').StrategySpotify,
-  //Facebook require's
-  FacebookStrategy = require('./routes/index').StrategyFaceBook;
+  spotifyStrategy = require('./routes/index').StrategySpotify;
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 
+require('dotenv').config();
+
+
+var app = express();
+require('./db').connect();
 
 //import user register spotify function
-
-/* const spotifyRegister = require('./models/user').registerWithSpotify; */
-
+const spotifyRegister = require('./models/user').registerWithSpotify;
+const checkTokenSpotify = require('./models/user').checkTokenSpotify;
 
 const {
   checkToken
@@ -24,17 +25,12 @@ const usersRouter = require('./routes/users');
 const festivalesRouter = require('./routes/festivales');
 const checkTokenRouter = require('./routes/checkToken');
 const raizRouter = require('./routes/raiz');
-const { log } = require('console');
 
 
 
 
 
-require('dotenv').config();
 
-
-var app = express();
-require('./db').connect();
 
 
 // view engine setup/configure express
@@ -57,13 +53,12 @@ Esto será tan simple como almacenar el ID de usuario cuando se serializa y enco
  */
 passport.serializeUser((user, done) => {
   done(null, user);
-  console.log(user);
 
 });
 
 passport.deserializeUser((obj, done) => {
   done(null, obj);
-  console.log(obj);
+  /*  console.log(obj); */
 
 });
 
@@ -87,22 +82,6 @@ passport.use(
     }
   )
 );
-
-/**
- * Funcion verify para el uso de Passport-Facebook, creando una nueva instancia de la Strateg.js;
- * 
- */
-passport.use(new FacebookStrategy({
-  clientID: process.env.FACEBOOK_CLIENT,
-  clientSecret: process.env.FACEBOOK_SECRET,
-  callbackURL: "http://localhost:3000/callback"
-},
-  function (accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ facebookId: profile.id }, function (err, user) {
-      return cb(err, user);
-    });
-  }
-));
 
 
 /**
@@ -138,9 +117,11 @@ app.get(
     showDialog: true
   }),
   function (req, res) {
-    console.log(req, res)
+    console.log(req, res);
+
   }
 );
+
 
 app.get(
   '/callback',
@@ -148,12 +129,32 @@ app.get(
     failureRedirect: '/login'
   }),
   function (req, res) {
+    spotifyRegister({
+      name: req.user._json.id,
+      email: req.user._json.email,
+      password: req.query.code,
+      username: req.user._json.id,
+      token: req.query.code
+    });
+    res.redirect(`http://localhost:4200/choose-fest?code=${req.query.code}?name=${req.user._json.id}`, 200);
     /*     res.json({
-          code: req.query.code
-        }); */
-
+          token: req.query.code
+        }) */
+    sendNewUser(req.user._json.id, req.query.code);
   }
 );
+
+
+//middleware para enviar los datos del usuario nuevo que se ha registrado con spotify a la parte del front 
+
+function sendNewUser(pUserName, pUserToken) {
+  app.get('/sendUser', (req, res) => {
+    res.send({
+      username: pUserName,
+      token: pUserToken
+    })
+  })
+}
 
 app.get('/logout', function (req, res) {
   req.logout();
@@ -161,26 +162,6 @@ app.get('/logout', function (req, res) {
 });
 //!
 
-//! routes for Facebook oAuth;
-app.get('/auth/facebook',
-  passport.authenticate('facebook'));
-
-app.get('/callback',
-  passport.authenticate('facebook', {
-    failureRedirect: '/login'
-  }),
-  function (req, res) {
-    // Successful authentication, redirect home.
-    res.json(
-      {
-        code: req.query.code
-      }
-    )
-  });
-
-
-
-//!
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

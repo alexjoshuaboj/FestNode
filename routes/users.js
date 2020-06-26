@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 
 
 
+
 /* GET users listing. */
 router.post('/register', async (req, res) => {
   req.body.password = bcrypt.hashSync(req.body.password, 10);
@@ -25,7 +26,6 @@ router.post('/register', async (req, res) => {
 
 // POST User login // http://localhost:3000/users/login
 router.post('/login', async (req, res) => {
-
   try {
     if (!req.headers['user_token']) {
       const result = await User.getByEmail(req.body.email);
@@ -60,6 +60,8 @@ router.post('/login', async (req, res) => {
   };
 });
 
+
+//Loggin with spotify new user
 
 
 

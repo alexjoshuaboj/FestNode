@@ -1,4 +1,3 @@
-const db = require("../db");
 
 const createUser = ({
     name,
@@ -74,16 +73,26 @@ const updateUser = ({
             resolve(result);
         })
     })
-}
+};
 
-/* const registerWithSpotify = (token_spotify) => {
+const registerWithSpotify = ({ name, email, password, username, token }) => {
     return new Promise((resolve, reject) => {
-        db.query('insert into usuarios (token_spotify) value (?)', [token_spotify], (err, result) => {
+        db.query('insert into usuarios (name, email, password, username, token) value (?, ?, ?, ?, ?)', [name, email, password, username, token], (err, result) => {
             if (err) reject(err);
             resolve(result);
         })
     })
-} */
+};
+
+const checkTokenSpotify = (emailSpotify) => {
+    return new Promise((resolve, reject) => {
+        db.query('select name from heroku_66e653247fde55b.usuarios where email = ?', [emailSpotify], (err, rows) => {
+            if (err) reject(err);
+            if (rows.length !== 1) resolve(null);
+            resolve(rows);
+        })
+    })
+};
 
 module.exports = {
     createUser,
@@ -91,10 +100,8 @@ module.exports = {
     updateToken,
     checkValidatorToken,
     updatePhoto,
-<<<<<<< HEAD
-}
-=======
     getUser,
-    updateUser
+    updateUser,
+    registerWithSpotify,
+    checkTokenSpotify
 };
->>>>>>> 23838ad9f4fb2b0800b73497c377fe6ddc63fef9

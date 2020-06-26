@@ -123,6 +123,52 @@ router.get('/spotify/getToken', (req, res) => {
 
 });
 
+router.get('/getUserFestivals/:idUser', async (req, res) => {
+    try {
+        const result = await Festival.getUserFestivals(req.params.idUser);
+        res.json(result)
+    } catch (err) {
+        res.json({
+            error: err.message
+        })
+    }
+
+});
+
+router.get('/getArtist', async (req, res) => {
+    try {
+        const result = await Festival.getAllArtist();
+        res.json(result);
+    } catch (err) {
+        res.json({
+            error: err.message
+        })
+    }
+});
+
+router.post('/addArtist', async (req, res) => {
+    try {
+        const result = await Festival.AddArtist(req.body);
+        res.json(result)
+    } catch (err) {
+        res.json({
+            error: err.message
+        })
+    }
+});
+
+router.post('/addArtistFest', async (req, res) => {
+    try {
+        console.log(req.body);
+        const result = await Festival.addArtistFestival(req.body);
+        res.json(result);
+    } catch (err) {
+        res.json({
+            error: err.message
+        })
+    }
+})
+
 
 
 

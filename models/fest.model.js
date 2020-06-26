@@ -41,11 +41,61 @@ const getHours = ({
             resolve(rows);
         })
     })
+};
+
+const getUserFestivals = (idUser) => {
+    return new Promise((resolve, reject) => {
+        db.query('select festivales.id, festivales.nombre, festivales.img from festivales, usuarios, usuarios_festivales where usuarios_festivales.festivales_id = festivales.id and usuarios.id = usuarios_festivales.usuarios_id and usuarios_id = ?', [idUser], (err, rows) => {
+            if (err) reject(err);
+            resolve(rows);
+        })
+    })
+};
+
+const getAllArtist = () => {
+    return new Promise((resolve, reject) => {
+        db.query('select * from bandas', (err, rows) => {
+            if (err) reject(err);
+            resolve(rows);
+        })
+    })
+};
+
+const AddArtist = ({
+    nombre,
+    spotify_id,
+    img
+}) => {
+    return new Promise((resolve, reject) => {
+        db.query('INSERT INTO bandas (nombre, spotify_id, img) VALUES (?, ?, ?)', [nombre, spotify_id, img], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+        })
+    })
+};
+const addArtistFestival = ({
+    idFest,
+    idArtist,
+    inicio,
+    fin
+}) => {
+    return new Promise((resolve, reject) => {
+        db.query('INSERT INTO festivales_bandas (bandas_id, festivales_id, inicio, fin) VALUES (?, ?, ?, ?)', [idArtist, idFest, inicio, fin], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+        })
+    })
 }
+
+
 
 module.exports = {
     getAll,
     selectFest,
     getBandsFest,
-    getHours
+    getHours,
+    getUserFestivals,
+    getAllArtist,
+    AddArtist,
+    addArtistFestival
 }

@@ -21,8 +21,14 @@ Content-Type: application/json
 ###
 GET http://localhost:3000/fests
 Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjMxLCJjcmVhdGVEQVRFIjoxNTkyMjA3NTc3LCJleHBpcmVEQVRFIjoxNTkyMjA4NDc3LCJpYXQiOjE1OTIyMDc1Nzd9.oiHXxgNXV6sww-3W-AySk_30PcVOcqb4ulGkQfyN-0c"
+###
+GET http://localhost:3000/fests/getHours
+Content-Type: application/json
 
-
+{
+"idUser": 101,
+"idFest": 1
+}
 
 
 

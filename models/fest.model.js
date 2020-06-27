@@ -31,10 +31,10 @@ const getBandsFest = (fest) => {
     })
 };
 // Query que devuelve las bandas y horarios de un usuario y un festival
-const getHours = ({
+const getHours = (
     idUser,
     idFest
-}) => {
+) => {
     return new Promise((resolve, reject) => {
         db.query('select bandas.nombre, festivales_bandas.inicio, festivales_bandas.fin from bandas, festivales_bandas where  bandas.id = festivales_bandas.bandas_id and festivales_bandas.idfestivales_bandas in (select bands_users.festivales_bandas_idfestivales_bandas from bands_users, usuarios_festivales where usuarios_festivales.usuarios_id = ? and usuarios_festivales.festivales_id = ? and bands_users.usuarios_festivales_idusuarios_festivales = usuarios_festivales.idusuarios_festivales)', [idUser, idFest], (err, rows) => {
             if (err) reject(err);

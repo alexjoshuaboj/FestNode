@@ -84,9 +84,9 @@ router.get('/imgSpotify/:idArtist', async (req, res) => {
 });
 
 //Rura GET que devuelve los grupos junto a los horarios que un usuario ha seleccionado para ver en un festival introduciendo idUser e idFest
-router.get('/getHours', async (req, res) => {
+router.get('/getHours/:idUser/:idFest', async (req, res) => {
     try {
-        const bandsHours = await Festival.getHours(req.body);
+        const bandsHours = await Festival.getHours(req.params.idUser, req.params.idFest);
         res.json(bandsHours);
     } catch (err) {
         res.json({

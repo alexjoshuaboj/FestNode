@@ -136,7 +136,7 @@ app.get(
       username: req.user._json.id,
       token: req.query.code
     });
-    res.redirect(`http://localhost:4200/choose-fest?code=${req.query.code}?name=${req.user._json.id}`, 200);
+    res.redirect(`http://localhost:4200/choose-fest?code=${req.query.code}?name=${req.user._json.id}`);
     /*     res.json({
           token: req.query.code
         }) */

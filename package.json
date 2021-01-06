@@ -7,7 +7,7 @@
     "startdev": "nodemon ./bin/www"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "consolidate": "^0.15.1",
     "cookie-parser": "~1.4.4",
